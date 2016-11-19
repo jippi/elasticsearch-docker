@@ -22,4 +22,11 @@ do
     fi
 done < <(env)
 
+# fix permissions before running elasticsearch
+# this will help using docker volumes where permissions could be root by default
+for esdirs in config data logs; do \
+    mkdir -p "$esdirs"; \
+    chown -R elasticsearch:elasticsearch "$esdirs"; \
+done
+    
 exec bin/elasticsearch ${es_opts}
